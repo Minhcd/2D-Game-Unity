@@ -8,11 +8,13 @@ public class PlayerAttack : MonoBehaviour
     public bool attacking;
     public Animator anim;
     public Collider2D trigger;
+    public SoundManager sound;
 
     private void Awake()
     {
         anim = gameObject.GetComponent<Animator>();
         trigger.enabled = false;
+        sound = GameObject.FindGameObjectWithTag("sound").GetComponent<SoundManager>();
     }
 
     // Update is called once per frame
@@ -23,6 +25,7 @@ public class PlayerAttack : MonoBehaviour
             attacking = true;
             trigger.enabled = true;
             attackdelay = 0.3f;
+            sound.Playsound("swords");
         }
         if (attacking)
         {

@@ -10,6 +10,8 @@ public class TurretAI : MonoBehaviour
     public GameObject bullet;
     public Transform target, shootpointL, shootpointR;
     public Animator anim;
+    public gamemaster gm;
+    public SoundManager sound;
 
     private void Awake()
     {
@@ -18,7 +20,8 @@ public class TurretAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        gm = GameObject.FindGameObjectWithTag("gamemaster").GetComponent<gamemaster>();
+        sound = GameObject.FindGameObjectWithTag("sound").GetComponent<SoundManager>();
     }
 
     // Update is called once per frame
@@ -39,7 +42,9 @@ public class TurretAI : MonoBehaviour
         }
         if (curHealth <= 0)
         {
+            sound.Playsound("destroy");
             Destroy(gameObject);
+            gm.points += 3;
         }
     }
 

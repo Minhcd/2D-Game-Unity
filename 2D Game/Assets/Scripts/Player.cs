@@ -9,12 +9,16 @@ public class Player : MonoBehaviour
     public int ourHealth, maxHealth = 5;
     private Rigidbody2D r2;
     private Animator anim;
+    public gamemaster gm;
+    public SoundManager sound;
     // Start is called before the first frame update
     void Start()
     {
         r2 = gameObject.GetComponent<Rigidbody2D>();
         anim = gameObject.GetComponent<Animator>();
+        gm = GameObject.FindGameObjectWithTag("gamemaster").GetComponent<gamemaster>();
         ourHealth = maxHealth;
+        sound = GameObject.FindGameObjectWithTag("sound").GetComponent<SoundManager>();
     }
 
     // Update is called once per frame
@@ -81,6 +85,8 @@ public class Player : MonoBehaviour
     public void Death()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (PlayerPrefs.GetInt("highscore") < gm.points)
+            PlayerPrefs.SetInt("highscore", gm.points);
     }
     public void Damage(int damage)
     {
@@ -91,5 +97,14 @@ public class Player : MonoBehaviour
     {
         r2.velocity = new Vector2(0, 0);
         r2.AddForce(new Vector2(Knockdir.x * -300, Knockdir.y * Knockpow));
+    }
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.CompareTag("Coins"))
+        {
+            sound.Playsound("coins");
+            Destroy(col.gameObject);
+            gm.points += 1;
+        }
     }
 }
